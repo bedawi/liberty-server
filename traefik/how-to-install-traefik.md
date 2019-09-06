@@ -24,7 +24,9 @@ Router:443 --> Server:443
 ## Add a Network in Docker
 You got docker installed and started it? Create a virtual network that connects traefik to your containers:
 
+```
 docker network create traefik_reverseproxy
+```
 
 ## Set Permissions
 Go to /mydatafolder/liberty-server/traefik/config/ACME and run
@@ -45,15 +47,15 @@ Pick an editor and edit the file
 To create the password, run this command:
 
 ```
-$ htdigest -c passwordfile Administration admin
+$ htpasswd -c passwordfile admin
 $ cat passwordfile
 ```
 
-Example output for the password "test":
+Example output:
 
-admin:Administration:fc8b8d90787cc5cb465bbdfd5c678d29
+admin:fc8b8d90787cc5cb465bbdfd5c678d29
 
-Copy your output into your traefik.toml, but leave the middle part away
+Copy your output into your traefik.toml:
 
 users = ["admin:fc8b8d90787cc5cb465bbdfd5c678d29"]
 
@@ -64,5 +66,22 @@ docker-compose up
 ```
 ... if there are no error messages, break it with ctrl+c and run
 ```
-docker-compose up -d
+$ docker-compose up -d
+```
+
+## Open Your Local Firewall
+Depending on your Linux-setup, you may have to open the ports 80 (http) and 443 (https) on your local firewall. But do not mess with your firewall if its not necessary: often docker does the configuration for you when you automatically. Check ```iptables -L``` and look for "Chain Docker".
+
+If you have to open the ports manually:
+
+On Fedora/RHEL/CentOS first check, which 'zone' you are in currently:
+```
+$ firewall-cmd --list-all
+```
+The first line tells you your zone, the other linus your settings. Lets say your zone is 'home', then you open the ports for http and https this way:
+```
+$ firewall-cmd --zone=home --add-service=http --permanent
+$ firewall-cmd --zone=home --add-service=https --permanent
+$ firewall-cmd --zone=home --add-port=8080/tcp --permanent
+
 ```

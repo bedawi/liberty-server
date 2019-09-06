@@ -29,7 +29,9 @@ docker network create traefik_reverseproxy
 ## Set Permissions
 Go to /mydatafolder/liberty-server/traefik/config/ACME and run
 
+```
 $ chmod 600 acme.json
+```
 
 ## Edit the configuration file
 Pick an editor and edit the file
@@ -42,9 +44,10 @@ Pick an editor and edit the file
 
 To create the password, run this command:
 
+```
 $ htdigest -c passwordfile Administration admin
-
 $ cat passwordfile
+```
 
 Example output for the password "test":
 
@@ -55,9 +58,11 @@ Copy your output into your traefik.toml, but leave the middle part away
 users = ["admin:fc8b8d90787cc5cb465bbdfd5c678d29"]
 
 ## Start the Traefik Container
+```
 cd /mydatafolder/liberty-server/traefik
-
 docker-compose up
-
+```
 ... if there are no error messages, break it with ctrl+c and run
+```
 docker-compose up -d
+```

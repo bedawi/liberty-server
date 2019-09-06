@@ -2,12 +2,14 @@
 Docker can easily be installed on your linux machine by running these commands:
 ```
 $ curl -fsSL https://get.docker.com -o get-docker.sh
-$ sh get-docker.
+$ sh get-docker.sh
 ```
 
 # Docker-Compose Installation
 Using phython-pip docker-compose can be installed with this command:
-& pip install docker-compose
+```
+$ pip install docker-compose
+```
 
 # Choose Your Data-Folder
 You have to select a folder on a large partition to host all your servers' data. This folder could be /mydatafolder - pick whatever is right for you.

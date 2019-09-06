@@ -1,5 +1,6 @@
 # What is Traefik?
 Traefik is a modern reverse-proxy. It handles the traffic from the internet to your dockerized applications.
+
 Traefik also negotiates SSL-certificates for your services with let's encrypt.
 Check out https://traefik.io for more information.
 
@@ -17,6 +18,7 @@ Hint: A professional DNS hoster from Germany is strato.de. Their domain package 
 If you are behind a router then you have to set up port forwarding:
 
 Router:80 --> Server:80
+
 Router:443 --> Server:443
 
 ## Add a Network in Docker
@@ -26,10 +28,12 @@ docker network create traefik_reverseproxy
 
 ## Set Permissions
 Go to /mydatafolder/liberty-server/traefik/config/ACME and run
+
 $ chmod 600 acme.json
 
 ## Edit the configuration file
 Pick an editor and edit the file
+
 /mydatafolder/liberty-server/traefik/config/traefik.toml
 
 * set your domain name
@@ -37,17 +41,22 @@ Pick an editor and edit the file
 * set a admin-password for the webgui
 
 To create the password, run this command:
+
 $ htdigest -c passwordfile Administration admin
+
 $ cat passwordfile
 
 Example output for the password "test":
+
 admin:Administration:fc8b8d90787cc5cb465bbdfd5c678d29
 
 Copy your output into your traefik.toml, but leave the middle part away
+
 users = ["admin:fc8b8d90787cc5cb465bbdfd5c678d29"]
 
 ## Start the Traefik Container
 cd /mydatafolder/liberty-server/traefik
+
 docker-compose up
 
 ... if there are no error messages, break it with ctrl+c and run

@@ -82,6 +82,6 @@ The first line tells you your zone, the other linus your settings. Lets say your
 ```
 $ firewall-cmd --zone=home --add-service=http --permanent
 $ firewall-cmd --zone=home --add-service=https --permanent
-$ firewall-cmd --zone=home --add-port=8080/tcp --permanent
+$ firewall-cmd --zone=home --add-port=8180/tcp --permanent
 
 ```

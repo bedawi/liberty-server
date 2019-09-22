@@ -7,7 +7,7 @@ services:
     container_name: matrix-synapse
     restart: always
     volumes:
-      - $PWD/data:/data
+      - $PWD/data:/data # important: this is a relative path!
     labels:
       - "traefik.backend=matrix-synapse"
       - "traefik.enable=true"

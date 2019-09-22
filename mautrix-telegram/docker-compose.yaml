@@ -7,3 +7,10 @@ services:
     restart: unless-stopped
     volumes:
     - $PWD/data:/data
+    networks:
+    - traefik_proxy
+
+networks:
+  traefik_proxy:
+    external:
+      name: traefik_proxy

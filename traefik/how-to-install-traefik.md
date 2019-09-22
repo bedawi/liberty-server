@@ -25,7 +25,7 @@ Router:443 --> Server:443
 You got docker installed and started it? Create a virtual network that connects traefik to your containers:
 
 ```
-docker network create traefik_reverseproxy
+docker network create traefik_proxy
 ```
 
 ## Set Permissions

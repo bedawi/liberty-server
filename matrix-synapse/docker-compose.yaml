@@ -1,0 +1,23 @@
+version: '3.3'
+
+services:
+
+  matrix-server:
+    image: matrixdotorg/synapse
+    container_name: matrix-synapse
+    restart: always
+    volumes:
+      - $PWD/data:/data
+    labels:
+      - "traefik.backend=matrix-synapse"
+      - "traefik.enable=true"
+      - "traefik.frontend.rule=Host:your.domain.name" # Put in here your subdomain.domain.tld
+      - "traefik.port=80"
+      - "traefik.docker.network=traefik_proxy"
+    networks:
+      - traefik_proxy
+
+networks:
+  traefik_proxy:
+    external:
+      name: traefik_proxy

@@ -1,0 +1,9 @@
+version: "3.7"
+
+services:
+  mautrix-telegram:
+    container_name: mautrix-telegram
+    image: mautrix-telegram-custom
+    restart: unless-stopped
+    volumes:
+    - $PWD/data:/data

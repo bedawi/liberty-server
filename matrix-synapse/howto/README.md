@@ -4,9 +4,9 @@
 Matrix synapse has to be started once with the "generate"-command. Run this from your /path/to/my/mydatafolder/matrix-synapse.
 
 ``
-  docker run -it --rm \  
-    -v $PWD/data:/data \  
-    -e SYNAPSE_SERVER_NAME=your.domain.name \  
-    -e SYNAPSE_REPORT_STATS=yes \  
+  docker run -it --rm \<br>
+    -v $PWD/data:/data \<br>
+    -e SYNAPSE_SERVER_NAME=your.domain.name \<br>
+    -e SYNAPSE_REPORT_STATS=yes \<br>
     matrixdotorg/synapse:latest generate
 ``

@@ -1,5 +1,5 @@
 # Matrix-Synapse
-![Network Map of Matrix-Synapse behind Traefik](matrix-telegram-docker.svg?raw=true "Network Map")
+![Network Map of Matrix-Synapse behind Traefik](matrix-telegram-docker.svg)
 
 Matrix synapse has to be started once with the "generate"-command. Run this from your /path/to/my/mydatafolder/matrix-synapse.
 

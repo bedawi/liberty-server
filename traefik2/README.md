@@ -15,6 +15,7 @@ Add the following labels to your containers to make them available in traefik:
       - "traefik.http.routers.whoami.rule=Host(`whoami.mydomain.com`)"
       - "traefik.http.routers.whoami.entrypoints=websecure"
       - "traefik.http.routers.whoami.tls.certresolver=mytlschallenge"
+      - "traefik.docker.network=webproxy"
 ```
 
 Replace "whoami" with the container name and edit the hostname.
@@ -28,3 +29,9 @@ Replace "whoami" with the container name and edit the hostname.
 5. Run docker-compose up -d from the traefik2-folder to start the new service.
 6. Check the traefik's status on <http://localhost:8080>
 7. When all works, remember to permanently disable your trafik1 container and close port 80 on your router/firewall.
+
+## Troubleshooting
+
+### Bad Gateway
+
+Check if the network of your container matches the traefik network. In my example this is ```webproxy```. Containers that are to be available from the Internet through traefik must be in this network.

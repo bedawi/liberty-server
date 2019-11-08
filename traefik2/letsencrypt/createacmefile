@@ -1,0 +1,5 @@
+#!/bin/bash
+echo "Creating ACME-File in current folder with access rules 600..."
+touch acme.json
+chmod 600 acme.json
+echo "...done!"

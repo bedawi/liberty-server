@@ -22,7 +22,9 @@ Replace "whoami" with the container name and edit the hostname.
 ## Switch from traefik 1 to traefik 2
 
 1. Add the new labels to your containers
-2. Change into the traefik2 folder and edit the docker-compose.yaml file. The change that must be done is adding your email address. 
-3. Stop your old traefik1 container
-4. Run docker-compose up -d from the traefik2-folder to start the new service.
-5. Check the traefik's status on <http://localhost:8080>
+2. Change into the trafik2/letsencrypt folder and create the ```acme.json``` file. Change the permissions of the file to 600 with ```chmod 600 acme.json```.
+3. Change into the traefik2 folder and edit the docker-compose.yaml file. The change that must be done is adding your email address.
+4. Stop your old traefik1 container
+5. Run docker-compose up -d from the traefik2-folder to start the new service.
+6. Check the traefik's status on <http://localhost:8080>
+7. When all works, remember to permanently disable your trafik1 container and close port 80 on your router/firewall.

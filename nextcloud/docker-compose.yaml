@@ -1,0 +1,43 @@
+---
+version: '3.3'
+
+services: 
+  nextcloud-app:
+    image: nextcloud:latest
+    container_name: nextcloud-app
+    restart: always
+    volumes: 
+      - $PWD/config:/var/www/html/config
+      - $PWD/cloud:/var/www/html
+      - $PWD/apps:/var/www/html/apps
+    environment:
+      - NEXTCLOUD_DATA_DIR=/var/www/html/data
+    labels:
+      - "traefik.enable=true"
+      - "traefik.port=80"
+      - "traefik.http.routers.cloud.entrypoints=websecure"
+      - "traefik.http.routers.cloud.rule=Host(`yourhostname`)" # Put in your hostname here, e.g. subdomain.domain.tld
+      - "traefik.http.routers.cloud.tls.certresolver=mytlschallenge"
+      - "traefik.http.routers.cloud.middlewares=cloud@docker"
+      - "traefik.docker.network=webproxy"
+      - "traefik.http.middlewares.cloud.headers.customFrameOptionsValue=SAMEORIGIN"
+      - "traefik.http.middlewares.cloud.headers.framedeny=true"
+      - "traefik.http.middlewares.cloud.headers.sslredirect=true"
+      - "traefik.http.middlewares.cloud.headers.stsIncludeSubdomains=true"
+      - "traefik.http.middlewares.cloud.headers.stsPreload=true"
+      - "traefik.http.middlewares.cloud.headers.stsSeconds=15552000"
+    networks:
+      - webproxy
+      - default
+    logging:
+      options:
+        max-size: '12m'
+        max-file: '5'
+      driver: json-file
+    
+networks:
+  webproxy:
+    external:
+      name: webproxy
+  default:
+    driver: bridge

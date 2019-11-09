@@ -1,0 +1,27 @@
+version: '3.3'
+
+services: 
+  nextcloud-database:
+    image: mariadb
+    container_name: cloud-db
+    command: --transaction-isolation=READ-COMMITTED --binlog-format=ROW
+    restart: always
+    volumes:
+      - $PWD/db:/var/lib/mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=randompasswordhere
+      - MYSQL_PASSWORD=randompasswordhere
+      - MYSQL_DATABASE=nextcloud
+      - MYSQL_USER=nextcloud
+    networks:
+      - backend
+    logging:
+      options:
+        max-size: '12m'
+        max-file: '5'
+      driver: json-file
+
+networks:
+  backend: # this network is part of the nextcloud stack
+    external:
+      name: nextcloud_backend

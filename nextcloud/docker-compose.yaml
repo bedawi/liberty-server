@@ -28,7 +28,7 @@ services:
       - "traefik.http.middlewares.cloud.headers.stsSeconds=15552000"
     networks:
       - webproxy
-      - default
+      - backend
     logging:
       options:
         max-size: '12m'
@@ -36,8 +36,7 @@ services:
       driver: json-file
     
 networks:
-  webproxy:
+  webproxy: # this is the network provided by traefik
     external:
       name: webproxy
-  default:
-    driver: bridge
+  backend: # your database should be in this network

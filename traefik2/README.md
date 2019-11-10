@@ -1,5 +1,7 @@
 # How to use traefik (v2.x)
 
+![Traefik v2 Dashboard](../images/traefik2-dashboard.png)
+
 ## Note: This is a let's encrypt example
 
 My traefik v2.x configuration example uses let's encrypt to obtain ssl certificates. There are different methods to acquire a certificate: TLS Challenge, HTTP Challenge, and DNS Challenge. While my traefik v1.x example used HTTP Challenge, this traefik v2.0 example uses TLS Challenge. The advantage of TLS over HTTP Challenge is that you do not need to open port 80 to the public anymore.

@@ -33,11 +33,15 @@ docker-compose up -d
 
 ## Whats in the docker-compose.yaml
 
+### Container image
+
 ```
     image: nextcloud:latest
 ```
 
 The image to be pulled from docker hub. ```:latest``` means "latest version" 
+
+### Container Name and Behavior
 
 ```
     container_name: nextcloud-app
@@ -45,6 +49,8 @@ The image to be pulled from docker hub. ```:latest``` means "latest version"
 ```
 
 The name of the container instance. It will automatically restarted after failure or reboot.
+
+### Persistent Data Configurations
 
 ```
     volumes:
@@ -61,6 +67,8 @@ In this section is defined where the persistent data of Nextcloud will be stored
 ``` 
 
 Environment variables are readable from inside the container. To learn more about Nextcloud's environment variables, read the documentation please. <https://hub.docker.com/_/nextcloud>
+
+### Labels - Traefik Configuration
 
 ```
     labels:
@@ -85,6 +93,8 @@ ITS IMPORTANT THAT YOU AT LEAST CHANGE YOUR HOSTENAME HERE!
 
 Please check you trafik's documentation for further details: <https://docs.traefik.io/>
 
+### Networking
+
 ```
     networks:
       - webproxy
@@ -92,6 +102,8 @@ Please check you trafik's documentation for further details: <https://docs.traef
 ```
 
 These lines define which networks to use. ```webproxy``` is the network where traefik reverse proxy is running. ```backend``` is the network for services like the database.
+
+### Logging
 
 ```
     logging:
@@ -102,6 +114,8 @@ These lines define which networks to use. ```webproxy``` is the network where tr
 ```
 
 These are the individual logging options of the container. Please check out the docker manual to learn more: <https://docs.docker.com/config/containers/logging/configure/>
+
+### Networks
 
 ```
 networks:

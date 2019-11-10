@@ -1,7 +1,6 @@
 version: '3.3'
 
 services:
-
   matrix-server:
     image: matrixdotorg/synapse
     container_name: matrix-synapse
@@ -9,15 +8,20 @@ services:
     volumes:
       - $PWD/data:/data # important: this is a relative path!
     labels:
-      - "traefik.backend=matrix-synapse"
       - "traefik.enable=true"
-      - "traefik.frontend.rule=Host:your.domain.name" # Put in here your subdomain.domain.tld
-      - "traefik.port=80"
-      - "traefik.docker.network=traefik_proxy"
+      - "traefik.port=8008"
+      - "traefik.docker.network=webproxy"
+      - "traefik.http.routers.matrix-synapse.entrypoints=websecure"
+      - "traefik.http.routers.matrix-synapse.rule=Host(`yourhostname`)" # Put in your hostname here, e.g. subdomain.domain.tld
+      - "traefik.http.routers.matrix-synapse.tls.certresolver=mytlschallenge"
     networks:
-      - traefik_proxy
-
+      - webproxy
+    logging:
+      options:
+        max-size: '12m'
+        max-file: '5'
+      driver: json-file
 networks:
-  traefik_proxy:
+  webproxy:
     external:
-      name: traefik_proxy
+      name: webproxy

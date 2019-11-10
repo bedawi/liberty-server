@@ -13,3 +13,15 @@ Matrix synapse has to be started once with the "generate"-command. Run this from
     -e SYNAPSE_REPORT_STATS=yes \
     matrixdotorg/synapse:latest generate
 ```
+
+## Second start: use docker run
+
+Use ```docker ps --all```-command to list all your containers. Run the matrix-synapse container.
+
+If you like to use matrix-synapse behind the traefik v2 reverse proxy, you have to either add all the necessary labels or to delete the existing container and set up a new one with docker-compose.
+
+## If configuration already exists: Start with docker-compose
+
+```
+docker-compose up -d
+```

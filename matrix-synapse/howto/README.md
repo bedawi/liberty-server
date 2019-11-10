@@ -25,3 +25,18 @@ If you like to use matrix-synapse behind the traefik v2 reverse proxy, you have 
 ```
 docker-compose up -d
 ```
+
+## Set up your DNS
+
+Matrix-Synapse by default communicates over Port 8001. If you want to pipe it through SSL port 443 of your Reverse Proxy, you need to add a "SRV record" to your DNS-Setup. For Matrix this entry looks like this:
+
+```
+SRV: _matrix._tcp.matrix 10 5 443 subdomain.domain.tld.
+```
+
+This tells clients and other federation servers to communicate through port 443/tcp when accessing your Matrix server.
+The details, how to set up an SRV record is different for each hoster or DNS provider.
+
+## Test your setup
+
+With the Matrix Federation Tester you can easily find out if your DNS-Setup works: <https://federationtester.matrix.org/>

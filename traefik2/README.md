@@ -1,4 +1,4 @@
-# How to use traefik (v2.x)
+# How to use Traefik (v2.x)
 
 ![Traefik v2 Dashboard](../images/traefik2-dashboard.png)
 
@@ -22,7 +22,7 @@ Add the following labels to your containers to make them available in traefik:
 
 Replace "whoami" with the container name and edit the hostname.
 
-## Switch from traefik 1 to traefik 2
+## Switch from Traefik 1 to Traefik 2
 
 1. Add the new labels to your containers
 2. Change into the traefik2/letsencrypt folder and create the ```acme.json``` file. Change the permissions of the file to 600 with ```chmod 600 acme.json```.
@@ -35,6 +35,7 @@ Replace "whoami" with the container name and edit the hostname.
 ## Folders
 
 ```/letsencrypt``` - in this folder your certificates will be stored.
+
 ```/rules``` - in this folder additional traefik rules are stored. For a start I added extra tls rules which cannot be added as container labels. Check <https://docs.traefik.io/v2.0/https/tls/#tls-options> for more information.
 
 ## Troubleshooting

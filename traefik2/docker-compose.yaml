@@ -12,14 +12,16 @@ services:
       - "--providers.docker.exposedbydefault=false"
       - "--entrypoints.websecure.address=:443"
       - "--certificatesresolvers.mytlschallenge.acme.tlschallenge=true"
-      #- "--certificatesresolvers.mytlschallenge.acme.caserver=https://acme-staging-v02.api.letsencrypt.org/directory"
       - "--certificatesresolvers.mytlschallenge.acme.email=***youremail@here***"
       - "--certificatesresolvers.mytlschallenge.acme.storage=/letsencrypt/acme.json"
+      - "--providers.file.directory=/rules"
+      - "--providers.file.watch=true"
     ports:
       - "443:443"
       - "8080:8080"
     volumes:
       - "./letsencrypt:/letsencrypt"
+      - "./rules:/rules:ro"
       - "/var/run/docker.sock:/var/run/docker.sock:ro"
     networks:
       - traefik_proxy

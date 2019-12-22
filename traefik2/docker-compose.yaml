@@ -11,11 +11,16 @@ services:
       - "--providers.docker=true"
       - "--providers.docker.exposedbydefault=false"
       - "--entrypoints.websecure.address=:443"
+      # Let's Encrypt
       - "--certificatesresolvers.mytlschallenge.acme.tlschallenge=true"
       - "--certificatesresolvers.mytlschallenge.acme.email=***youremail@here***"
       - "--certificatesresolvers.mytlschallenge.acme.storage=/letsencrypt/acme.json"
       - "--providers.file.directory=/rules"
       - "--providers.file.watch=true"
+      # Logging options, what to log
+      - "--accesslog=true"
+      - "--accesslog.format=json"
+      - "--accessLog.filters.statusCodes=400-499"
     ports:
       - "443:443"
       - "8080:8080"
@@ -26,6 +31,7 @@ services:
     networks:
       - traefik_proxy
       - default
+    # Logging options: where to log
     logging:
       options:
         max-size: '12m'

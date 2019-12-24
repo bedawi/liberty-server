@@ -3,8 +3,5 @@ Free yourself from the big cloud providers and run your own cloud services. This
 
 ![Network Map of Matrix-Synapse behind Traefik](liberty-server.png)
 
-## Status
-This project is in its infancy. There is not much to see here. Come back later please. ;-)
-
 ## About
-This project aims to provide an easy to follow tutorial for beginners to help setting up a homeserver with services like Nextcloud, Matrix and others. The ultimate goal would be a script to guide the administrator through all steps necessary.
+Liberty Server is a set of Docker setup files helping you to set up your own nextcloud server with Docker on Linux.

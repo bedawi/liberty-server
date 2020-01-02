@@ -45,4 +45,5 @@ $ sudo chcon -R -u system_u -r object_r -t container_file_t /mydatafolder
 
 ## Further reading
 
-[Redhat Documentation on SELinux]<https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/8/html/using_selinux/index>
+[Redhat Documentation on SELinux](https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/8/html/using_selinux/index)
+[Redhat Documentation on Docker in RHEL7](https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux_atomic_host/7/html/container_security_guide/docker_selinux_security_policy)

@@ -7,9 +7,9 @@ services:
     container_name: nextcloud-app
     restart: always
     volumes: 
-      - $PWD/config:/var/www/html/config
-      - $PWD/cloud:/var/www/html
-      - $PWD/apps:/var/www/html/apps
+      - $PWD/config:/var/www/html/config:Z # :Z is only for SELinux-enabled systems like Fedora. Remove if necessary.
+      - $PWD/cloud:/var/www/html:Z
+      - $PWD/apps:/var/www/html/apps:Z
     environment:
       - NEXTCLOUD_DATA_DIR=/var/www/html/data
     labels:

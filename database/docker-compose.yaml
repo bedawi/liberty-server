@@ -7,7 +7,7 @@ services:
     command: --transaction-isolation=READ-COMMITTED --binlog-format=ROW
     restart: always
     volumes:
-      - $PWD/db:/var/lib/mysql
+      - $PWD/db:/var/lib/mysql:Z # :Z is only for SELinux-enabled systems like Fedora. Remove if necessary.
     environment:
       - MYSQL_ROOT_PASSWORD=randompasswordhere
       - MYSQL_PASSWORD=randompasswordhere

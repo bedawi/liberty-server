@@ -26,8 +26,8 @@ services:
       - "443:443"
       - "8080:8080"
     volumes:
-      - "./letsencrypt:/letsencrypt"
-      - "./rules:/rules:ro"
+      - "./letsencrypt:/letsencrypt":Z # :Z is only for SELinux-enabled systems like Fedora. Remove if necessary.
+      - "./rules:/rules:ro":Z
       - "/var/run/docker.sock:/var/run/docker.sock:ro"
     networks:
       - traefik_proxy

@@ -6,7 +6,7 @@ services:
     image: mautrix-telegram-custom
     restart: unless-stopped
     volumes:
-    - $PWD/data:/data
+    - $PWD/data:/data:Z # :Z is only for SELinux-enabled systems like Fedora. Remove if necessary.
     networks:
     - traefik_proxy
 

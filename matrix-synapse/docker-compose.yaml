@@ -6,7 +6,7 @@ services:
     container_name: matrix-synapse
     restart: always
     volumes:
-      - $PWD/data:/data # important: this is a relative path!
+      - $PWD/data:/data:Z # :Z is only for SELinux-enabled systems like Fedora. Remove if necessary.
     labels:
       - "traefik.enable=true"
       - "traefik.port=8008"

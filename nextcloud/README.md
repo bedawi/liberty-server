@@ -74,22 +74,34 @@ Environment variables are readable from inside the container. To learn more abou
     labels:
       - "traefik.enable=true"
       - "traefik.port=80"
+      - "traefik.docker.network=webproxy"
+      # Entrypoint and TLS
       - "traefik.http.routers.cloud.entrypoints=websecure"
       - "traefik.http.routers.cloud.rule=Host(`yourhostname`)" # Put in your hostname here, e.g. subdomain.domain.tld
       - "traefik.http.routers.cloud.tls.certresolver=mytlschallenge"
-      - "traefik.http.routers.cloud.middlewares=cloud@docker"
-      - "traefik.docker.network=webproxy"
+      # Middlewares:
+      - "traefik.http.routers.cloud.middlewares=cloud@docker,cloud-dav@docker"
+      # Middleware cloud adds additional headers:
       - "traefik.http.middlewares.cloud.headers.customFrameOptionsValue=SAMEORIGIN"
       - "traefik.http.middlewares.cloud.headers.framedeny=true"
       - "traefik.http.middlewares.cloud.headers.sslredirect=true"
       - "traefik.http.middlewares.cloud.headers.stsIncludeSubdomains=true"
       - "traefik.http.middlewares.cloud.headers.stsPreload=true"
       - "traefik.http.middlewares.cloud.headers.stsSeconds=15552000"
+      # Middleware cloud-dav replaces .well-known paths for caldav and carddav with proper nextcloud path
+      - "traefik.http.middlewares.cloud-dav.replacepathregex.regex=^/.well-known/ca(l|rd)dav"
+      - "traefik.http.middlewares.cloud-dav.replacepathregex.replacement=/remote.php/dav/"
 ```
 
 Labels are like stickers on a parcel. They can tell the postman how to handle the parcel. In this case they tell the traefik reverse proxy what services to provide.
 
 ITS IMPORTANT THAT YOU AT LEAST CHANGE YOUR HOSTENAME HERE!
+
+Read more about Middlewares here:
+<https://docs.traefik.io/middlewares/overview/>
+
+Read more about CalDAV and CardDAV service discovery on Nextcloud here:
+<https://docs.nextcloud.com/server/18/admin_manual/issues/general_troubleshooting.html#service-discovery>
 
 Please check you trafik's documentation for further details: <https://docs.traefik.io/>
 

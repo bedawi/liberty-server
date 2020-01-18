@@ -5,6 +5,7 @@ services:
   traefik:
     image: "traefik:latest"
     container_name: "traefik2"
+    privileged: true
     restart: always
     command:
       #- "--log.level=DEBUG"

@@ -33,7 +33,7 @@ services:
       - "traefik.http.middlewares.cloud-dav.replacepathregex.regex=^/.well-known/ca(l|rd)dav"
       - "traefik.http.middlewares.cloud-dav.replacepathregex.replacement=/remote.php/dav/"
     networks:
-      - webproxy
+      - traefik_proxy
       - backend
     logging:
       options:
@@ -42,7 +42,7 @@ services:
       driver: json-file
     
 networks:
-  webproxy: # this is the network provided by traefik
+  traefik_proxy: # this is the network provided by traefik
     external:
-      name: webproxy
+      name: traefik_proxy
   backend: # your database should be in this network

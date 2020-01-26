@@ -44,6 +44,14 @@ Replace "whoami" with the container name and edit the hostname.
 docker network create traefik_proxy
 ```
 
+## Traefik dashboard
+
+Traefik provides a dashboard on port 8080. To make it available you have to allow access to this port on your server. On a Fedora/Red Hat based machine a temporary firewall rule can be set like this:
+
+```bash
+$ sudo firewall-cmd --zone=public --add-port=8080/tcp
+```
+
 ## Troubleshooting
 
 ### Bad Gateway

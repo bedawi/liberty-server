@@ -10,6 +10,7 @@ services:
       - $PWD/config:/var/www/html/config:Z # :Z is only for SELinux-enabled systems like Fedora. Remove if necessary.
       - $PWD/cloud:/var/www/html:Z
       - $PWD/apps:/var/www/html/apps:Z
+      - $PWD/data:/var/www/html/data:Z
     environment:
       - NEXTCLOUD_DATA_DIR=/var/www/html/data
     labels:
@@ -35,6 +36,10 @@ services:
     networks:
       - traefik_proxy
       - backend
+    # If you like to bypass traefik, then uncomment these two lines. Nextcloud will then be available on port 80
+    # Remember to allow the port temporarily on your firewall: sudo firewall-cmd --zone=public --add-port=80/tcp
+    #ports:
+    #  - "80:80"
     logging:
       options:
         max-size: '12m'

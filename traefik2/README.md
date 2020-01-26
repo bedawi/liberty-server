@@ -38,6 +38,12 @@ Replace "whoami" with the container name and edit the hostname.
 
 ```/rules``` - in this folder additional traefik rules are stored. For a start I added extra tls rules which cannot be added as container labels. Check <https://docs.traefik.io/v2.0/https/tls/#tls-options> for more information.
 
+## Create Network
+
+```Bash
+docker network create traefik_proxy
+```
+
 ## Troubleshooting
 
 ### Bad Gateway

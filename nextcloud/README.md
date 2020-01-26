@@ -113,7 +113,13 @@ Please check you trafik's documentation for further details: <https://docs.traef
       - backend
 ```
 
-These lines define which networks to use. ```webproxy``` is the network where traefik reverse proxy is running. ```backend``` is the network for services like the database.
+These lines define which networks to use. ```traefik_proxy``` is the network where traefik reverse proxy is running. ```backend``` is the network for services like the database.
+
+Create these networks with like this:
+
+```bash
+$ docker network create nextcloud_backend
+```
 
 ### Logging
 

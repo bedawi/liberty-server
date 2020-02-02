@@ -44,6 +44,16 @@ Replace "whoami" with the container name and edit the hostname.
 docker network create traefik_proxy
 ```
 
+## Prepare the docker-compose-file and start the container the first time
+
+![How to edit traefik's docker-compose file](https://techrevelations.de/wp-content/uploads/2020/01/Peek-2020-01-26-12-39_edit_traefik.gif)
+
+Before running the ```docker-compose up``` command, you need to edit the docker-composer file in the traefik2 folder and set your eMail address. This is important for registration of your domain with Let’s Encrypt. If you do not provide a valid address here ou will not be notified when there is a problem with your certificates!
+
+![Staring trafik](https://techrevelations.de/wp-content/uploads/2020/01/Peek-2020-01-26-12-45_start_traefik.gif)
+
+Start traefik with the command ```docker-compose up```.
+
 ## Traefik dashboard
 
 Traefik provides a dashboard on port 8080. To make it available you have to allow access to this port on your server. On a Fedora/Red Hat based machine a temporary firewall rule can be set like this:

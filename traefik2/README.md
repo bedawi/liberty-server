@@ -48,7 +48,7 @@ docker network create traefik_proxy
 
 ![How to edit traefik's docker-compose file](https://techrevelations.de/wp-content/uploads/2020/01/Peek-2020-01-26-12-39_edit_traefik.gif)
 
-Before running the ```docker-compose up``` command, you need to edit the docker-composer file in the traefik2 folder and set your eMail address. This is important for registration of your domain with Let’s Encrypt. If you do not provide a valid address here ou will not be notified when there is a problem with your certificates!
+Before running the ```docker-compose up``` command, you need to edit the docker-composer file in the traefik2 folder and set your eMail address. This is important for registration of your domain with Let’s Encrypt. If you do not provide a valid address here, you will not be notified when there is a problem with your certificates!
 
 ![Staring trafik](https://techrevelations.de/wp-content/uploads/2020/01/Peek-2020-01-26-12-45_start_traefik.gif)
 

@@ -10,7 +10,7 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.port=8008"
-      - "traefik.docker.network=webproxy"
+      - "traefik.docker.network=traefik_proxy"
       - "traefik.http.routers.matrix-synapse.entrypoints=websecure"
       - "traefik.http.routers.matrix-synapse.rule=Host(`yourhostname`)" # Put in your hostname here, e.g. subdomain.domain.tld
       - "traefik.http.routers.matrix-synapse.tls.certresolver=mytlschallenge"
@@ -24,4 +24,4 @@ services:
 networks:
   webproxy:
     external:
-      name: webproxy
+      name: traefik_proxy

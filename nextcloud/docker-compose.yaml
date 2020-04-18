@@ -16,7 +16,7 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.port=80"
-      - "traefik.docker.network=webproxy"
+      - "traefik.docker.network=traefik_proxy"
       # Entrypoint and TLS
       - "traefik.http.routers.cloud.entrypoints=websecure"
       - "traefik.http.routers.cloud.rule=Host(`yourhostname`)" # Put in your hostname here, e.g. subdomain.domain.tld

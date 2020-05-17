@@ -50,3 +50,29 @@ To add these kernel arguments to grub permanently this command can be used:
 ```
 $  sudo grubby --update-kernel=ALL --args="systemd.unified_cgroup_hierarchy=0" --make-default
 ```
+
+## Docker and the Firewall on Fedora 32
+
+Docker handles the firewall settings for it's own services. On Fedora 32 the firewall backend was changed from iptables to nftables.
+
+To further give docker the ability handle the firewall the setting has to be reverted to iptables. To change the firewall settings open firewalld.conf
+
+```sudo vim /etc/firewalld/firewalld.conf```
+
+and change this line
+
+```
+FirewallBackend=nftables
+```
+
+to
+
+```
+FirewallBackend=iptables
+```
+
+Then restart firewalld:
+
+```bash
+sudo systemctl restart firewalld.service
+```

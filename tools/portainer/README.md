@@ -22,3 +22,14 @@ docker rm portainer
 docker pull portainer/portainer:latest
 docker-compose up -d
 ```
+
+## Important advise on security
+
+Portainer needs access to the docker socket and therefor has full access to ALL containers and their content. Be aware of this when using portainer or any other tool with such privileges.
+
+I suggest to consider the following minimal security precautions:
+
+1. Never make the portainer port available on the internet or inside an untrusted network.
+2. Never log in over unencrypted http protocol from an untrutested network.
+3. Use a unique and complex password.
+4. Consider using SSL encryption.

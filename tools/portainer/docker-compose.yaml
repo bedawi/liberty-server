@@ -1,0 +1,32 @@
+version: "3.7"
+
+services:
+
+  portainer:
+    image: "portainer/portainer:latest"
+    container_name: "portainer"
+    privileged: true
+    restart: always
+    ports:
+      - "8000:8000"
+      - "9000:9000"
+    volumes:
+      - "portainer_data:/data:Z" 
+      - "/var/run/docker.sock:/var/run/docker.sock"
+    networks:
+      - default
+    logging:
+      options:
+        max-size: '12m'
+        max-file: '5'
+      driver: json-file
+
+volumes:
+    portainer_data:
+
+networks:
+    default:
+        driver: bridge
+  
+
+

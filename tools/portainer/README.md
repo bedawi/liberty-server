@@ -30,6 +30,6 @@ Portainer needs access to the docker socket and therefor has full access to ALL 
 I suggest to consider the following minimal security precautions:
 
 1. Never make the portainer port available on the internet or inside an untrusted network.
-2. Never log in over unencrypted http protocol from an untrutested network.
+2. Never log in over unencrypted http protocol from an untrusted network.
 3. Use a unique and complex password.
 4. Consider using SSL encryption.

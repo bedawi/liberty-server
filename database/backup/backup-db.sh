@@ -2,7 +2,7 @@
 #
 # Variables
 #
-NC_CONTAINER="nextcloud-app-custom" # Name of your nextcloud container 
+NC_CONTAINER="nextcloud-app" # Name of your nextcloud container 
 DB_CONTAINER="cloud-db" # Name of your database container
 DB_BACKUP_PATH="`dirname $0`" # Change this if the backups are to be stored in another folder. 
 BACKUP_TIMESTAMP=`date +%y-%m-%d-%H%M%N`

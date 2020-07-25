@@ -1,0 +1,222 @@
+---
+  - name: moby-traefik-nextcloud-mariadb-fedora32
+# ********************************************************************************************************
+# This file comes without any warranty. Use it at your own risk! Do not apply if 
+# you do not understand what you are doing! Never use default passwords! 
+# Do regular updates!
+# Part of the liberty-server project on https://github.com/bedawi/liberty-server/
+# Please report issues here: https://github.com/bedawi/liberty-server/issues
+# Please help developing this project by sending pull requests if you have done
+# changes that other people might find useful.
+# ********************************************************************************************************
+#
+# **************** CHANGE THE FOLLOWING ENTRIES TO SUIT YOUR NEEDS ***************************************
+    hosts: cloudservers                       # reflects the ansible group defined in /etc/ansible/hosts
+    vars:
+      persistent_data: /data                  # where all your files will be stored
+      db_name: nextcloud                      # the name of the nextcloud database
+      db_username: nextcloud                  # the username to access the database
+      db_password: changethis                 # never use default passwords!!!
+      db_root_password: changethis
+      letsencrypt_email: somone@somewhere     # If your certificate has problems you will be notified
+      letsencrypt_fqdn: sub.domain.tld        # Change this to your host.domain.name 
+      user_dockeradmin: some_user             # username of user on server to be docker admin
+      # This URL provides an example TLS config file:
+      tls_config_file_url: https://raw.githubusercontent.com/bedawi/liberty-server/master/traefik2/rules/tls.yaml
+# **************** END OF VARIABLES - NO NEED TO CHANGE ANYTHING AFTER THIS LINE *************************
+    tasks:
+# These are the tasks to install docker
+      - name: make sure moby engine and required packages are installed
+        dnf:
+          name:
+            - moby-engine
+            - python3-docker
+          state: latest
+      - name: enable docker
+        systemd:
+          name: docker
+          enabled: yes
+          state: started
+
+# If normal users need the permission to run docker command, they have to be added to the docker group
+      - name: add a user to docker group
+        user:
+          name: "{{ user_dockeradmin }}" 
+          groups: docker
+          append: yes
+
+# firewall: trust docker0 
+      - name: let firewall trust docker
+        firewalld:
+          zone: trusted
+          interface: docker0
+          permanent: yes
+          state: enabled
+
+# firewall: 
+      - name: enable masquerade in firewall zone
+        firewalld:
+          masquerade: yes
+          state: enabled
+          permanent: yes
+
+# Open webserver ports on firewall
+      - name: open firewall ports on firewall in current zone
+        firewalld:
+          immediate: yes
+          service: https
+          state: enabled
+          permanent: yes
+
+# Here we start with the container setup specific for nextcloud. First we define networks.
+# The network "traefik_proxy" is the network between traefik and nextcloud. 
+# The network "nextcloud-backend" is the network between nextcloud and the mariadb database
+      - name: add docker network traefik_proxy
+        docker_network:
+          name: traefik_proxy
+
+      - name: add docker network nextcloud-backend
+        docker_network:
+          name: nextcloud-backend
+
+# Here we create the data folder and subfolders
+
+      - name: create "{{ persistent_data }}" folder for persistent data
+        file:
+          path: "{{ persistent_data }}"
+          state: directory
+          group: docker
+
+      - name: create traefik-rules-folder
+        file:
+          path: "{{ persistent_data }}/traefik2/rules"
+          state: directory
+          group: docker
+
+      - name: create traefik-letsencrypt-folder
+        file:
+          path: "{{ persistent_data }}/traefik2/letsencrypt"
+          state: directory
+          group: docker
+
+      - name: create file for letsencrypt certificates and set permissions
+        file:
+          path: "{{ persistent_data }}/traefik2/letsencrypt/acme.json"
+          state: touch
+          owner: root
+          group: docker # even though that does not matter
+          mode: '600'
+
+# Copies over the TLS-Configuration from GitHub
+
+      - name: Copy over TLS configuration file from githubusercontent
+        get_url:
+          url: "{{ tls_config_file_url }}"
+          dest: "{{ persistent_data }}/traefik2/rules/tls.yaml"
+          group: docker
+
+# Create the traefik reverse proxy container
+
+      - name: traefik2 container
+        docker_container:
+          image: traefik:latest
+          name: traefik2
+          privileged: yes
+          restart_policy: unless-stopped
+          command:
+            - "--api.insecure=true"
+            - "--providers.docker=true"
+            - "--providers.docker.exposedbydefault=false"
+            - "--entrypoints.websecure.address=:443"
+            - "--certificatesresolvers.mytlschallenge.acme.tlschallenge=true"
+            - "--certificatesresolvers.mytlschallenge.acme.email={{ letsencrypt_email }}"
+            - "--certificatesresolvers.mytlschallenge.acme.storage=/letsencrypt/acme.json"
+            - "--providers.file.directory=/rules"
+            - "--providers.file.watch=true"
+            - "--accesslog=true"
+            - "--accesslog.format=json"
+            - "--accessLog.filters.statusCodes=400-499"
+          published_ports:
+            - "443:443"
+#            - "8080:8080" # Only needed to check traefik configuration
+          volumes:
+            - "{{ persistent_data }}/traefik2/letsencrypt:/letsencrypt:Z"
+            - "{{ persistent_data }}/traefik2/rules/:/rules:ro"
+            # To configure itself, traefik needs access to docker socket
+            - "/var/run/docker.sock:/var/run/docker.sock:ro" 
+          networks: 
+            - name: traefik_proxy
+          log_driver: json-file
+          log_options:
+            max-size: "12m"
+            max-file: "5"
+
+# Create database container
+
+      - name: mariadb container
+        docker_container:
+          image: mariadb:latest
+          name: nextcloud-db
+          networks:
+            - name: nextcloud-backend
+          exposed_ports:
+            - "3306"
+          hostname: nextcloud-db
+          volumes:
+            - "{{ persistent_data }}/nextcloud/database:/var/lib/mysql:Z"
+          env: 
+            MYSQL_ROOT_PASSWORD: "{{ db_root_password }}"
+            MYSQL_PASSWORD: "{{ db_password }}"
+            MYSQL_DATABASE: "{{ db_name }}"
+            MYSQL_USER: "{{ db_username }}"
+          log_driver: json-file
+          log_options:
+            max-size: "12m"
+            max-file: "5"
+
+# Finally create nextcloud container
+
+      - name: nextcloud container
+        docker_container:
+          #published_ports: 80:80
+          image: nextcloud:latest
+          name: nextcloud-app
+          networks:
+            - name: traefik_proxy
+            - name: nextcloud-backend
+          hostname: nextcloud
+          volumes: 
+            - "{{ persistent_data }}/nextcloud/config:/var/www/html/config:Z"
+            - "{{ persistent_data }}/nextcloud/cloud:/var/www/html:Z"
+            - "{{ persistent_data }}/nextcloud/apps:/var/www/html/apps:Z"
+            - "{{ persistent_data }}/nextcloud/data:/var/www/html/data:Z"
+          env:
+            MYSQL_DATABASE: "{{ db_name }}"
+            MYSQL_USER: "{{ db_username }}"
+            MYSQL_PASSWORD: "{{ db_password }}"
+            MYSQL_HOST: nextcloud-db
+          labels:
+            traefik.enable: "true"
+            traefik.port: "80"
+            traefik.docker.network: "traefik_proxy"
+            # Entrypoint and TLS
+            traefik.http.routers.cloud.entrypoints: "websecure"
+            traefik.http.routers.cloud.rule: "Host(`{{ letsencrypt_fqdn }}`)"
+            traefik.http.routers.cloud.tls.certresolver: "mytlschallenge"
+            # Middlewares:
+            traefik.http.routers.cloud.middlewares: "cloud@docker,cloud-dav@docker"
+            # Middleware cloud adds additional headers:
+            traefik.http.middlewares.cloud.headers.customFrameOptionsValue: "SAMEORIGIN"
+            traefik.http.middlewares.cloud.headers.framedeny: "true"
+            traefik.http.middlewares.cloud.headers.sslredirect: "true"
+            traefik.http.middlewares.cloud.headers.stsIncludeSubdomains: "true"
+            traefik.http.middlewares.cloud.headers.stsPreload: "true"
+            traefik.http.middlewares.cloud.headers.stsSeconds: "15552000"
+            # Middleware cloud-dav replaces .well-known paths for caldav and carddav with proper nextcloud path
+            traefik.http.middlewares.cloud-dav.replacepathregex.regex: "^/.well-known/ca(l|rd)dav"
+            traefik.http.middlewares.cloud-dav.replacepathregex.replacement: "/remote.php/dav/"
+          log_driver: json-file
+          log_options:
+            max-size: "12m"
+            max-file: "5"
+          

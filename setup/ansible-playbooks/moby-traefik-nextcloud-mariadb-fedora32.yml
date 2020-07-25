@@ -157,6 +157,7 @@
         docker_container:
           image: mariadb:latest
           name: nextcloud-db
+          restart_policy: unless-stopped
           networks:
             - name: nextcloud-backend
           exposed_ports:
@@ -181,6 +182,7 @@
           #published_ports: 80:80
           image: nextcloud:latest
           name: nextcloud-app
+          restart_policy: unless-stopped
           networks:
             - name: traefik_proxy
             - name: nextcloud-backend
